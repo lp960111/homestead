@@ -449,6 +449,16 @@ class Homestead
       end
     end
 
+    if settings.has_key?('php-ini') && settings['php-ini']
+        settings['php-ini'].each do |options|
+            config.vm.provision "shell" do |s|
+                s.name = 'Clear Variables'
+                s.path = script_dir + '/configure-php-ini.sh'
+                s.args = [s.keys[0], s[s.keys[0]]]
+            end
+        end
+    end
+
     config.vm.provision 'shell' do |s|
       s.name = 'Restarting Cron'
       s.inline = 'sudo service cron restart'
